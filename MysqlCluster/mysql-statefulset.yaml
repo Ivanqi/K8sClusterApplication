@@ -105,7 +105,7 @@ spec:
         readinessProbe:
           exec:
             # Check we can execute queries over TCP (skip-networking is off).
-            command: ["mysql", "-h", "127.0.0.1", "-e", "SELECT 1"]
+            command: ["mysql", "-h", "127.0.0.1", "-uroot", "-e", "SELECT 1"]
           initialDelaySeconds: 5
           periodSeconds: 2
           timeoutSeconds: 1
@@ -139,7 +139,7 @@ spec:
                   MASTER_LOG_POS=${BASH_REMATCH[2]}" > change_master_to.sql.in
           fi
 
-          # 如果change_master_to.sql.in，就意味着需要做集群初始化工作
+          # 如果change_master_to.sql.in存在，就意味着需要做集群初始化工作
           if [[ -f change_master_to.sql.in ]]; then
             # 但一定要先等MySQL容器启动之后才能进行下一步连接MySQL的操作
             echo "Waiting for mysqld to be ready (accepting connections)"
